@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <!-- Main Container -->
+        <div class="col-md-12 col-lg-10">
+            <div class="row">
+                <!-- New Releases Section -->
+                <div class="col-md-12">
+                    <h2>Yeni Çıkan Ürünler</h2>
+                    <div class="product-grid">
+                        {% for newrelease in newrealeses %}
+                        <div class="product-card">
+                            <div class="product-card-header">
+                                <img src="{{ newrelease.image.url }}" alt="{{ newrelease.newrealeses_name }}" class="product-img">
+                            </div>
+                            <div class="product-card-body">
+                                <h4>{{ newrelease.newrealeses_name }}</h4>
+                                <p>{{ newrelease.description }}</p>
+                                {% if newrelease.discount_price %}
+                                    <p class="old-price">{{ newrelease.price }} TL</p>
+                                    <p class="new-price">{{ newrelease.discount_price }} TL</p>
+                                {% else %}
+                                    <p class="new-price">{{ newrelease.price }} TL</p>
+                                {% endif %}
+                                <button class="add-to-cart-btn">Sepete Ekle</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-fluid {
+        padding: 20px;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .product-card {
+        background-color: #fff;
+        border: 1px solid #eaeaea;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-card-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .product-img {
+        width: auto;
+        height: 100%;
+        max-width: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-card-body {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .product-card-body h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .old-price {
+        text-decoration: line-through;
+        color: #777;
+    }
+
+    .new-price {
+        font-size: 18px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .add-to-cart-btn {
+        background-color: #28a745;
+        border: none;
+        color: #fff;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .add-to-cart-btn:hover {
+        background-color: #218838;
+    }
+</style>
+
+{% endblock %}

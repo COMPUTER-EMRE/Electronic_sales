@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="about-section">
+        <div class="container">
+            {% for info in about_info %}
+                <div class="about-content">
+                    {% if info.image %}
+                        <div class="about-image">
+                            <img src="{{ info.image.url }}" alt="Hakkında Resmi">
+                        </div>
+                    {% endif %}
+                    <div class="about-text">
+                        <h1>{{ info.title }}</h1>
+                        <p>{{ info.content }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Hakkında bilgisi bulunmamaktadır.</p>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_styles %}
+    <style>
+        .about-section {
+            padding: 60px 20px;
+            background-color: #eaeaea;
+            border-top: 5px solid #333;
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 20px;
+        }
+
+        .about-text {
+            flex: 1;
+            padding-right: 20px;
+            max-width: 65%;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .about-image {
+            flex: 1;
+            max-width: 35%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            max-width: 250px; /* Resmin maksimum genişliğini küçültür */
+            border-radius: 10px;
+            border: 2px solid #ddd;
+        }
+
+        .about-text h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .about-text p {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 30px;
+            }
+
+            .about-text,
+            .about-image {
+                max-width: 90%;
+                padding: 0;
+            }
+
+            .about-image img {
+                max-width: 80%; /* Mobil görünümde resmi daha da küçültür */
+                border: none;
+            }
+        }
+    </style>
+{% endblock %}

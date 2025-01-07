@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <!-- Main Container -->
+        <div class="col-md-12 col-lg-10">
+            <div class="row">
+                <!-- Filter Section -->
+                <div class="col-md-3">
+                    <div class="filter-section">
+                        <h5>Filtrele</h5>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-search"></i> Arama</h6>
+                            <form method="GET" action="{% url 'phoneapp:earphones' %}">
+                                <input type="text" class="form-control form-control-sm" name="search" id="search" placeholder="Ara..." value="{{ request.GET.search }}">
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Ara</button>
+                            </form>
+                        </div>
+                        <!-- Price Filter -->
+                        <div class="mb-3">
+                            <h6><i class="bi bi-cash"></i> Fiyat Aralığı</h6>
+                            <form method="GET" action="{% url 'phoneapp:earphones' %}">
+                                <div class="mb-2">
+                                    <label for="minPrice" class="form-label">Min</label>
+                                    <input type="number" class="form-control form-control-sm" name="min_price" id="minPrice" placeholder="0" value="{{ request.GET.min_price }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="maxPrice" class="form-label">Max</label>
+                                    <input type="number" class="form-control form-control-sm" name="max_price" id="maxPrice" placeholder="1000" value="{{ request.GET.max_price }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Filtrele</button>
+                            </form>
+                        </div>
+                        <form method="GET" action="{% url 'phoneapp:earphones' %}">
+                            {% for brand in brands %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="brand" value="{{ brand.name }}" id="brand{{ forloop.counter }}">
+                                <label class="form-check-label" for="brand{{ forloop.counter }}">{{ brand.name }}</label>
+                            </div>
+                            {% endfor %}
+                            <button type="submit" class="btn btn-primary btn-sm">Filtrele</button>
+                        </form>                        
+                        <!-- Color Filter -->
+                        <div class="mb-3">
+                            <h6><i class="bi bi-palette"></i> Renk</h6>
+                            <form method="GET" action="{% url 'phoneapp:earphones' %}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="color" value="Kırmızı" id="colorRed">
+                                    <label class="form-check-label" for="colorRed">Kırmızı</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="color" value="Mavi" id="colorBlue">
+                                    <label class="form-check-label" for="colorBlue">Mavi</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="color" value="Yeşil" id="colorGreen">
+                                    <label class="form-check-label" for="colorGreen">Yeşil</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="color" value="Siyah" id="colorBlack">
+                                    <label class="form-check-label" for="colorBlack">Siyah</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="color" value="Beyaz" id="colorWhite">
+                                    <label class="form-check-label" for="colorWhite">Beyaz</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Filtrele</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earphones Section -->
+                <div class="col-md-9">
+                    <h2>Kulaklık Ürünleri</h2>
+                    <div class="product-grid">
+                        {% for earphones in earphones %}
+                        <div class="product-card">
+                            <div class="product-card-header">
+                                <img src="{{ earphones.image.url }}" alt="{{ earphones.earphones_name }}" class="product-img">
+                            </div>
+                            <div class="product-card-body">
+                                <h4>{{ earphones.earphones_name }}</h4>
+                                <p>{{ earphones.description }}</p>
+                                {% if earphones.discount_price %}
+                                    <p class="old-price">{{ earphones.price }} TL</p>
+                                    <p class="new-price">{{ earphones.discount_price }} TL</p>
+                                {% else %}
+                                    <p class="new-price">{{ earphones.price }} TL</p>
+                                {% endif %}
+                                <button class="add-to-cart-btn">Sepete Ekle</button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-fluid {
+        padding: 20px;
+    }
+
+    .filter-section, .product-section {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .filter-section {
+        margin-right: 15px;
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+        top: 0; /* Offset from the top of the viewport */
+    }
+
+    .filter-section h5 {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+
+    .filter-section h6 {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .filter-section i {
+        margin-right: 5px;
+        color: #007bff;
+    }
+
+    .form-check-label {
+        font-size: 0.8rem;
+    }
+
+    .form-control {
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .product-card {
+        background-color: #fff;
+        border: 1px solid #eaeaea;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-card-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .product-img {
+        width: auto;
+        height: 100%;
+        max-width: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-card-body {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .product-card-body h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .old-price {
+        text-decoration: line-through;
+        color: #777;
+    }
+
+    .new-price {
+        font-size: 18px;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .add-to-cart-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .add-to-cart-btn:hover {
+        background-color: #218838;
+    }
+</style>
+
+{% endblock %}

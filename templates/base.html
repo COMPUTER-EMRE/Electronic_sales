@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet"> <!-- Bootstrap Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <style>
+    .logo-card {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid #ddd; /* Çerçeve rengi ve kalınlığı */
+    }
+    .logo-card img {
+      width: 80%; /* Logoyu biraz küçültmek için */
+      height: auto;
+    }
+    .card {
+      border: none; /* Dikdörtgen çerçeveyi kaldırır */
+    }
+    .card-body {
+      padding: 0; /* Card içindeki boşlukları kaldır */
+    }
+    .icon {
+      font-size: 1.5rem;
+      color: white;
+      margin-left: 15px;
+    }
+    /* Yeni alt menü (secondary nav) için stil */
+    .secondary-nav {
+      background-color: #333; /* Alt menü için arka plan rengi */
+      color: white;
+      /*position: sticky;*/
+      top: 56px; /* Navbar yüksekliği ile ayarlama yapabilirsiniz */
+      z-index: 1010; /* Diğer içeriklerin üzerinde görünmesi için */
+    }
+    .secondary-nav a {
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+    }
+    .secondary-nav a:hover {
+      background-color: #555;
+      color: #fff;
+    }
+
+    /* Footer CSS */
+    footer {
+      background-color: #333;
+      color: #fff;
+      padding: 20px 0;
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-content .social-media {
+      margin-bottom: 20px;
+    }
+
+    .footer-content .social-media a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 1.5em;
+    }
+
+    .footer-content .social-media a:hover {
+      color: #ddd;
+    }
+
+    .footer-content .footer-links {
+      margin-bottom: 20px;
+    }
+
+    .footer-content .footer-links a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+
+    .footer-content .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-content .footer-info {
+      font-size: 0.9em;
+    }
+  </style>
+  <title>Telefon Markaları</title>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-0">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'phoneapp:home' %}">Top navbar</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'phoneapp:send' %}">Ürünler</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'phoneapp:about' %}">Hakkımızda</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'phoneapp:comminecation' %}">İletişim</a>
+          </li>
+        </ul>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <!-- Üye Girişi ve Sepet İkonları -->
+        <div class="d-flex align-items-center">
+          <!-- Üye Girişi İkonu -->
+          <a href="{% url 'login' %}" class="icon">
+            <i class="bi bi-person-circle"></i> <!-- Bootstrap person-circle ikonu -->
+          </a>
+          <!-- Çıkış Butonu -->
+          <form method="POST" action="{% url 'logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link nav-link" style="padding: 0;">Logout</button>
+          </form>                                                  
+          <!-- Sepet İkonu -->
+          <a href="{% url 'phoneapp:basket' %}" class="icon">
+            <i class="bi bi-cart"></i> <!-- Bootstrap sepet ikonu -->
+          </a>
+        </div>        
+      </div>
+    </div>
+  </nav>
+
+  <!-- Alt Navbar -->
+  <nav class="secondary-nav d-flex justify-content-center">
+    <a href="{% url 'phoneapp:computer' %}">Bilgisayarlar</a>
+    <a href="{% url 'phoneapp:tablet' %}">Tabletler</a>
+    <a href="{% url 'phoneapp:earphones' %}">Kulaklıklar</a>
+    <a href="{% url 'phoneapp:newrealeses' %}">Yeni Çıkanlar</a>
+    <a href="#">Kampanyadakiler</a>
+  </nav>
+
+  <!-- İçerik Bloğu -->
+  {% block content %}
+  {% endblock %}
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-content">
+      <div class="social-media">
+        <a href="#" class="bi bi-facebook"></a>
+        <a href="#" class="bi bi-twitter"></a>
+        <a href="#" class="bi bi-instagram"></a>
+      </div>
+      <div class="footer-links">
+        <a href="{% url 'phoneapp:home' %}">Ana Sayfa</a>
+        <a href="{% url 'phoneapp:about' %}">Hakkımızda</a>
+        <a href="{% url 'phoneapp:send' %}">İletişim</a>
+      </div>
+      <div class="footer-info">
+        <p>&copy; 2024 Telefon Markaları. Tüm Hakları Saklıdır.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

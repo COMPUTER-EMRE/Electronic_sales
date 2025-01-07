@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <!-- Main Container -->
+        <div class="col-md-12 col-lg-10">
+            <div class="row">
+                <!-- Filter Section -->
+                <div class="col-md-3">
+                    <div class="filter-section">
+                        <h5>Filtrele</h5>
+                        
+                        <!-- Search Filter -->
+                        <div class="mb-3">
+                            <h6><i class="bi bi-search"></i> Arama</h6>
+                            <input type="text" class="form-control form-control-sm" id="search" placeholder="Ara..." onkeyup="filterTablets()">
+                        </div>
+                        
+                        <!-- Brand Filter -->
+                        <div class="mb-3">
+                            <h6><i class="bi bi-tags"></i> Marka</h6>
+                            <form method="GET" action="{% url 'phoneapp:tablet' %}">
+                                {% for brand in brands %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="brand" value="{{ brand }}" id="brand{{ forloop.counter }}">
+                                    <label class="form-check-label" for="brand{{ forloop.counter }}">{{ brand }}</label>
+                                </div>
+                                {% endfor %}
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Filtrele</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Price Filter -->
+                        <div class="mb-3">
+                            <h6><i class="bi bi-cash"></i> Fiyat Aralığı</h6>
+                            <form method="GET" action="{% url 'phoneapp:tablet' %}">
+                                <div class="mb-2">
+                                    <label for="minPrice" class="form-label">Min</label>
+                                    <input type="number" class="form-control form-control-sm" name="min_price" id="minPrice" placeholder="0" value="{{ request.GET.min_price }}">
+                                </div>
+                                <div class="mb-2">
+                                    <label for="maxPrice" class="form-label">Max</label>
+                                    <input type="number" class="form-control form-control-sm" name="max_price" id="maxPrice" placeholder="1000" value="{{ request.GET.max_price }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Filtrele</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Additional Filters (Optional) -->
+                        <!-- Örneğin, Renk filtresi eklemek isterseniz aşağıdaki bölümü kullanabilirsiniz -->
+                        {# 
+                        <div class="mb-3">
+                            <h6><i class="bi bi-palette"></i> Renk</h6>
+                            <form method="GET" action="{% url 'phoneapp:tablet' %}">
+                                {% for color in colors %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="color" value="{{ color }}" id="color{{ forloop.counter }}">
+                                    <label class="form-check-label" for="color{{ forloop.counter }}">{{ color }}</label>
+                                </div>
+                                {% endfor %}
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Filtrele</button>
+                            </form>
+                        </div>
+                        #}
+                    </div>
+                </div>
+
+                <!-- Product Section -->
+                <div class="col-md-9">
+                    <div class="product-section">
+                        <div class="product-grid" id="tabletGrid">
+                            {% for tablet in tablets %}
+                            <div class="product-card">
+                                <div class="product-card-header">
+                                    <img src="{{ tablet.image.url }}" alt="{{ tablet.tablet_name }}" class="product-img">
+                                </div>
+                                <div class="product-card-body">
+                                    <h4>{{ tablet.tablet_name }}</h4>
+                                    {% if tablet.discount_price %}
+                                        <p class="old-price">{{ tablet.price }} TL</p>
+                                        <p class="new-price">{{ tablet.discount_price }} TL</p>
+                                    {% else %}
+                                        <p class="new-price">{{ tablet.price }} TL</p>
+                                    {% endif %}
+                                    <button class="add-to-cart-btn">Sepete Ekle</button>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <p>Gösterilecek tablet bulunamadı.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-fluid {
+        padding: 20px;
+    }
+
+    .row.justify-content-center {
+        margin: 0 auto;
+    }
+
+    .filter-section, .product-section {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .filter-section {
+        margin-right: 15px;
+        position: -webkit-sticky; /* Safari */
+        position: sticky;
+        top: 0; /* Offset from the top of the viewport */
+    }
+
+    .filter-section h5 {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+
+    .filter-section h6 {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .filter-section i {
+        margin-right: 5px;
+        color: #007bff;
+    }
+
+    .form-check-label {
+        font-size: 0.8rem;
+    }
+
+    .form-control {
+        border-radius: 4px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        transition: background-color 0.3s;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .product-section h2 {
+        margin-bottom: 20px;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 0;
+        padding: 0;
+    }
+
+    .product-card {
+        background-color: #fff;
+        border: 1px solid #eaeaea;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-card-header {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        background-color: #f7f7f7;
+    }
+
+    .product-card-header img {
+        max-height: 100%;
+        max-width: 100%;
+        object-fit: contain;
+    }
+
+    .product-card-body {
+        padding: 15px;
+        text-align: center;
+    }
+
+    .old-price {
+        text-decoration: line-through;
+        color: #888;
+    }
+
+    .new-price {
+        font-size: 1.2rem;
+        color: #28a745;
+        margin: 0;
+    }
+
+    .add-to-cart-btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .add-to-cart-btn:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
